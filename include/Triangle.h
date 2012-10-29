@@ -6,12 +6,12 @@
 class Triangle: public Primitive
 {
 private:
-	Point3D left;
-	Point3D right;
-	Point3D top;
+	Vertex3D left;
+	Vertex3D right;
+	Vertex3D top;
 public:
 	Triangle();
-	Triangle(Point3D left, Point3D right, Point3D top);
+	Triangle(Vertex3D left, Vertex3D right, Vertex3D top);
 	virtual ~Triangle();
 
 	void setLeftX(float x);

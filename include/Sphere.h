@@ -3,25 +3,24 @@
 
 #include "Primitive.h"
 
-class Sphere : public Primitive
+class Sphere: public Primitive
 {
 private:
-    float radius;
-    int slices;
-    int stacks;
-    GLUquadric * texture_quad;
+	float radius;
+	int slices;
+	int stacks;
 
 public:
-    Sphere();
-    Sphere(float radius, int slcs, int stcks);
-    virtual ~Sphere();
+	Sphere();
+	Sphere(float radius, int slcs, int stcks);
+	virtual ~Sphere();
 
-    void setRadius(float rad);
-    void setSlices(int slcs);
-    void setStacks(int stcks);
-    void draw();
+	void setRadius(float rad);
+	void setSlices(int slcs);
+	void setStacks(int stcks);
+	void draw();
 
-    virtual int addValues(string attr, string val);
+	virtual int addValues(string attr, string val);
 };
 
 #endif

@@ -2,12 +2,24 @@
 #define	PRIMITIVE_H
 
 #include "CGFobject.h"
-#include "Point.h"
 
 #include <iostream>
 #include <string>
 
 using namespace std;
+
+typedef struct
+{
+    float x;
+    float y;
+} Vertex2D;
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+} Vertex3D;
 
 class Primitive
 {
