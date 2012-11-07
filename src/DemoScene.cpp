@@ -28,18 +28,21 @@ void DemoScene::init()
     // Defines a default normal
     glNormal3f(0, 0, 1);
 
-    obj = new ExampleObject();
+    /*obj = new ExampleObject();
     materialAppearance = new CGFappearance();
     textureAppearance = new CGFappearance("./textures/pyramid.jpg", GL_REPEAT, GL_REPEAT);
-    shader = new CGFshader("./shaders/texshader.vert", "./shaders/texshader.frag");
+    shader = new CGFshader("./shaders/texshader.vert", "./shaders/texshader.frag");*/
+    
+    cube = new MyCube();
+    
     setUpdatePeriod(30);
 }
 
 void DemoScene::update(long t)
 {
-    shader->bind();
+    /*shader->bind();
     shader->update(t / 400.0);
-    shader->unbind();
+    shader->unbind();*/
 
 }
 
@@ -63,8 +66,8 @@ void DemoScene::display()
 
     // Draw axis
     axis.draw();
-
-
+    cube->draw();
+/*
     // ---- END Background, camera and axis setup
 
 
@@ -79,8 +82,6 @@ void DemoScene::display()
     glTranslatef(0, 4, 0);
     textureAppearance->apply();
     obj->draw();
-    
-    (new Sphere(3,255,255))->draw();
 
     // shader object
 
@@ -89,7 +90,7 @@ void DemoScene::display()
     obj->draw();
     shader->unbind();
 
-
+*/
     // ---- END feature demos
 
     // We have been drawing in a memory area that is not visible - the back buffer, 

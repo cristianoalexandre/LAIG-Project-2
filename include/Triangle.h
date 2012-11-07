@@ -1,6 +1,8 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
+#include <cstdio>
+
 #include "Primitive.h"
 
 class Triangle: public Primitive

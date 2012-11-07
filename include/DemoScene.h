@@ -3,6 +3,8 @@
 
 #include "CGFscene.h"
 #include "CGFshader.h"
+#include "Cube.h"
+
 
 class DemoScene : public CGFscene
 {
@@ -17,6 +19,7 @@ private:
 	CGFappearance* materialAppearance;
 	CGFappearance* textureAppearance;
 	CGFshader* shader;
+        MyCube * cube;
 };
 
 #endif
