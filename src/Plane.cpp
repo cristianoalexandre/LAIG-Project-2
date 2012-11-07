@@ -40,6 +40,7 @@ Plane::Plane(GLint divisions_u, GLint divisions_v)
 
 void Plane::draw()
 {
+	/** Declaration of vertex and texture evaluators */
 	glMap2f(GL_MAP2_VERTEX_3,0.0, 1.0, 3, 2 ,0.0, 1.0, 6, 2, &control_points[0][0]);
 	glMap2f(GL_MAP2_TEXTURE_COORD_2,  0.0, 1.0, 2, 2,  0.0, 1.0, 4, 2,  &texture_points[0][0]);
 
@@ -55,11 +56,13 @@ void Plane::draw()
 
 	/** Draw the whole thing */
 	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	glEvalMesh2(GL_FILL, 0,divisions_u, 0,divisions_v);
 }
 
 void Plane::setTexture(string file_texture)
 {
 	pixmap.readBMPFile(file_texture.c_str());
-	pixmap.setTexture(LaigScene::incrementTexCounter());
+	int textureID = LaigScene::incrementTexCounter();
+	pixmap.setTexture(textureID);
 }
