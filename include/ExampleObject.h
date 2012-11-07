@@ -1,9 +1,9 @@
 #ifndef EXAMPLEOBJECT_H
 #define EXAMPLEOBJECT_H
 
-#include "CGFobject.h"
+#include "Object.h"
 
-class ExampleObject: public CGFobject {
+class ExampleObject: public Object {
 	public:
 		void draw();
 };
