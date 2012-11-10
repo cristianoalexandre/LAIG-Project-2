@@ -7,6 +7,8 @@ Object::Object(){
 	setPos_x(0.0);
 	setPos_y(0.0);
 	setPos_z(0.0);
+	ang_XY = 0;
+	ang_XZ = 0;
 	setAnimated(false);
 }
 
@@ -33,6 +35,22 @@ void Object::setAnimated(bool anim){
 	this->animate = anim;
 }
 
+void Object::setRotationAngleOnZZaxis(double ang){
+
+	this->ang_XY = ang;
+}
+
+void Object::setRotationAngleOnYYaxis(double ang){
+
+	this->ang_XZ += ang;
+}
+
+void Object::setOrientationVector(double vector[NUM_COORD]){
+
+	this->orientation_vector[X] = vector[X];
+	this->orientation_vector[Y] = vector[Y];
+	this->orientation_vector[Z] = vector[Z];
+}
 
 double Object::getPos_x(){
 
@@ -47,6 +65,16 @@ double Object::getPos_y(){
 double Object::getPos_z(){
 
 	return this->pos_z;
+}
+
+double Object::getAng_XZ(){
+
+	return this->ang_XZ;
+}
+
+double* Object::getOrientationVector(){
+
+	return this->orientation_vector;
 }
 
 bool Object::getAnimated(){
@@ -68,7 +96,22 @@ void Object::updatePosition(double delta_x, double delta_y, double delta_z){
 	setPos_z(this->pos_z + delta_z);
 }
 
+void Object::applyTransforms(){
 
-void Object::draw(){
+	glTranslated(this->pos_x, this->pos_y, this->pos_z);
+	double px,py,pz;
+	px = getPos_x();
+	py = getPos_y();
+	pz = getPos_z();
 
+	updateToPosition(0,0,0);
+	if(ang_XY != 0){
+		glRotatef(this->ang_XY ,0,0,1);
+	}
+	if(ang_XZ != 0){
+		glRotatef(-1*this->ang_XZ ,0,1,0);
+	}
+	updateToPosition(px,py,pz);
+	
 }
+

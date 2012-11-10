@@ -2,6 +2,7 @@
 #define LINEANIMATION_H
 
 #include "Object.h"
+#include "Animation.h"
 
 #include <vector>
 #include <iostream>
@@ -10,14 +11,10 @@
 
 using namespace std;
 
-#define NUM_COORD 3
-#define X 0
-#define Y 1
-#define Z 2
 
 typedef pair<vector<double>*,vector<double>*> ctrlPointsPair;
 
-class LineAnimation
+class LineAnimation: public Animation
 {
 private:
 
@@ -25,25 +22,44 @@ private:
 	double delta_y;
 	double delta_z;
 
+	double total_delta_x; 
+	double total_delta_y;
+	double total_delta_z;
+
+	double obj_ini_postion_x;
+	double obj_ini_postion_y;
+	double obj_ini_postion_z;
+
+	double obj_end_postion_x;
+	double obj_end_postion_y;
+	double obj_end_postion_z;
+
 	Object* animatedObject;
 
-	unsigned int mili_secs;
 	double total_animation_time;
+	double total_animation_distance;
 
 	ctrlPointsPair* controlPoints;
 
-	//static map<Object*,vector<double>*> allAnimatedObjects;
-
+	static unsigned int mili_secs;
 
 public:
 	LineAnimation();
 	~LineAnimation();
 
+	LineAnimation(Object* obj, ctrlPointsPair* ctrlP);
+	LineAnimation(Object* obj, ctrlPointsPair* ctrlP, double total_time, double total_distance);
+
 	void setDelta_x(double dx);
 	void setDelta_y(double dy);
 	void setDelta_z(double dz);
-	void setMiliSecs(unsigned int mSecs);
+
+	void setObj_ini_position_x(double ini_x);
+	void setObj_ini_position_y(double ini_y);
+	void setObj_ini_position_z(double ini_z);
+
 	void setTotalAnimationTime(double s);
+	void setTotalAnimationDistance(double d);
 	void setAnimatedObject(Object* obj);
 	void setControlPoints(ctrlPointsPair* cps);
 
@@ -51,21 +67,32 @@ public:
 	double getDelta_y() const;
 	double getDelta_z() const;
 
-	unsigned int getMiliSecs() const;
+	double getTotal_delta_x() const; 
+	double getTotal_delta_y() const;
+	double getTotal_delta_z() const;
+
+	double getObj_ini_postion_x() const;
+	double getObj_ini_postion_y() const;
+	double getObj_ini_postion_z() const;
+
 	double getTotalAnimationTime() const;
+	double getTotalAnimationDistance() const;
 
 	Object* getAnimatedObject() const;
 	ctrlPointsPair* getControlPoints() const;
 
+	void checkDeltas(double delt_x, double delt_y, double delt_z);
+
 	void init();
 	void animate();
+	void initValues();
 	
-	static void updateObjectPosition(int dummy); //value parametre of glutTimerFunc(int msecs, void (*func) (int value), value)
+	int updateObjectPosition(); 
 
+	static unsigned int getMiliSecs();
+	static void setMiliSecs(unsigned int mSecs);
 };
 
-
-static vector<LineAnimation*> allLineAnimations;
 
 
 #endif

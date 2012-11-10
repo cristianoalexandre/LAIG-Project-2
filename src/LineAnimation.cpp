@@ -10,7 +10,7 @@ LineAnimation::LineAnimation(){
 	setDelta_z(0.0);
 	setAnimatedObject(NULL);
 	setTotalAnimationTime(1.0);
-	this->mili_secs = 0;
+	setTotalAnimationDistance(0.0);
 }
 
 LineAnimation::~LineAnimation(){
@@ -31,13 +31,33 @@ void LineAnimation::setDelta_z(double z){
 	this->delta_z = z;
 }
 
+void LineAnimation::setObj_ini_position_x(double ini_x){
+
+	this->obj_ini_postion_x;
+}
+
+void LineAnimation::setObj_ini_position_y(double ini_y){
+
+	this->obj_ini_postion_y;
+}
+
+void LineAnimation::setObj_ini_position_z(double ini_z){
+
+	this->obj_ini_postion_z;
+}
+
 void LineAnimation::setMiliSecs(unsigned int mSecs){
-	this->mili_secs = mSecs;
+	LineAnimation::mili_secs = mSecs;
 }
 
 void LineAnimation::setTotalAnimationTime(double s){
 
 	this->total_animation_time = s;
+}
+
+void LineAnimation::setTotalAnimationDistance(double d){
+
+	this->total_animation_distance = d;
 }
 
 void LineAnimation::setAnimatedObject(Object* obj){
@@ -65,14 +85,49 @@ double LineAnimation::getDelta_z() const{
 	return this->delta_z;
 }
 
-unsigned int LineAnimation::getMiliSecs() const{
+double LineAnimation::getTotal_delta_x() const{
 
-	return this->mili_secs;
+	return this->total_delta_x;
+}
+
+double LineAnimation::getTotal_delta_y() const{
+
+	return this->total_delta_y;
+}
+
+double LineAnimation::getTotal_delta_z() const{
+
+	return this->total_delta_z;
+}
+
+double LineAnimation::getObj_ini_postion_x() const{
+
+	return this->obj_ini_postion_x;
+}
+
+double LineAnimation::getObj_ini_postion_y() const{
+
+	return this->obj_ini_postion_y;
+}
+
+double LineAnimation::getObj_ini_postion_z() const{
+
+	return this->obj_ini_postion_z;
+}
+
+unsigned int LineAnimation::getMiliSecs(){
+
+	return LineAnimation::mili_secs;
 }
 
 double LineAnimation::getTotalAnimationTime() const{
 
 	return this->total_animation_time;
+}
+
+double LineAnimation::getTotalAnimationDistance() const{
+
+	return this->total_animation_distance;
 }
 
 Object* LineAnimation::getAnimatedObject() const{
@@ -85,57 +140,85 @@ ctrlPointsPair* LineAnimation::getControlPoints() const{
 	return this->controlPoints;
 }
 
+void LineAnimation::checkDeltas(double dx, double dy, double dz){
 
-void LineAnimation::init(){
+	if((animatedObject->getPos_x() + dx) > obj_end_postion_x){
 
-	//INIT DELTAS BY CALCULATING TOTAL TRANSLATION FROM CTRLPOINTS
+		setDelta_x(obj_end_postion_x - animatedObject->getPos_x());
+	}
+	if((animatedObject->getPos_y() + dy) > obj_end_postion_y){
 
-	double total_delta_x = 0;
-	double total_delta_y = 0;
-	double total_delta_z = 0;
+		setDelta_y(obj_end_postion_y - animatedObject->getPos_y());
+	}
+	if((animatedObject->getPos_z() + dz) > obj_end_postion_z){
 
+		setDelta_x(obj_end_postion_z - animatedObject->getPos_z());
+	}
+}
+
+void LineAnimation::initValues(){
+
+	//IMEDIATELY AFTER KNOWING THE CONTROL POINTS WE CALCULATE THE OVERALL DESTANCE OF THE ANIMATION
 	total_delta_x = controlPoints->second->at(X) - controlPoints->first->at(X);
 	total_delta_y = controlPoints->second->at(Y) - controlPoints->first->at(Y);
 	total_delta_z = controlPoints->second->at(Z) - controlPoints->first->at(Z);
 
+	double dist_x = (double)powl(total_delta_x,2.0);
+	double	dist_y = (double)powl(total_delta_y,2.0);
+	double	dist_z = (double)powl(total_delta_z,2.0);
 
-	delta_x = (mili_secs/(total_animation_time*1000)) * total_delta_x;
-	delta_y = (mili_secs/(total_animation_time*1000)) * total_delta_y;
-	delta_z = (mili_secs/(total_animation_time*1000)) * total_delta_z;
-
-	void (*func)(int);
-	func = updateObjectPosition;
-	
-	/*vector<double>* deltas;
-	deltas->push_back(delta_x);
-	deltas->push_back(delta_y);
-	deltas->push_back(delta_z);
-
-
-	allAnimatedObjects.insert(this->getAnimatedObject(), deltas);*/
-
-	allLineAnimations.push_back(this);
-	int id = allLineAnimations.size() -1;
-
-	glutTimerFunc(mili_secs, func, 0);
+	total_animation_distance = (double)sqrtl(dist_x + dist_y + dist_z);
 }
 
 
-void LineAnimation::updateObjectPosition(int dummy){
+void LineAnimation::init(){
 
+	delta_x = (LineAnimation::getMiliSecs()/(total_animation_time*1000)) * total_delta_x;
+	delta_y = (LineAnimation::getMiliSecs()/(total_animation_time*1000)) * total_delta_y;
+	delta_z = (LineAnimation::getMiliSecs()/(total_animation_time*1000)) * total_delta_z;
+
+	obj_ini_postion_x = this->animatedObject->getPos_x();
+	obj_ini_postion_y = this->animatedObject->getPos_y();
+	obj_ini_postion_z = this->animatedObject->getPos_z();
+
+	obj_end_postion_x = obj_ini_postion_x + total_delta_x;
+	obj_end_postion_y = obj_ini_postion_y + total_delta_y;
+	obj_end_postion_z = obj_ini_postion_z + total_delta_z;	
+
+}
+
+int LineAnimation::updateObjectPosition(){
 	
-	/*animatedObject->updatePosition(this->delta_x, this->delta_y, this->delta_z);
+	if(fabs(animatedObject->getPos_x() -obj_ini_postion_x) >= fabs(total_delta_x)){
+		setDelta_x(0);
+	}
+	if(fabs(animatedObject->getPos_y() -obj_ini_postion_y) >= fabs(total_delta_y)){
+		setDelta_y(0);
+	}
+	if(fabs(animatedObject->getPos_z() -obj_ini_postion_z) >= fabs(total_delta_z)){
+		setDelta_z(0);
+	}
 
-	cout << "Tou no update" << endl;
+	if(fabs(animatedObject->getPos_x() -obj_ini_postion_x) >= fabs(total_delta_x) &&
+		fabs(animatedObject->getPos_y() -obj_ini_postion_y) >= fabs(total_delta_y) &&
+		fabs(animatedObject->getPos_z() -obj_ini_postion_z) >= fabs(total_delta_z)){
+			return 1;
+	}else{
 
-	cout << "Obj_x = " << animatedObject->getPos_x() << endl;
-	cout << "Obj_y = " << animatedObject->getPos_y() << endl;
-	cout << "Obj_z = " << animatedObject->getPos_z() << endl;*/
+		//checkDeltas(delta_x, delta_y, delta_z);
+
+		animatedObject->updatePosition(this->delta_x, this->delta_y, this->delta_z);
+		return 0;
+	}
 
 }
 
 void LineAnimation::animate(){
 
+	glPushMatrix();
+		this->animatedObject->applyTransforms();
+		this->animatedObject->draw();
+	glPopMatrix();
 }
 
 
