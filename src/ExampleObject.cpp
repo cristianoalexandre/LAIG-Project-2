@@ -2,10 +2,16 @@
 
 void ExampleObject::draw() 
 {
-	/*double orientation[NUM_COORD] = {0,0,1};
-	double up[NUM_COORD] = {0,1,0};
-	setOrientationVector(orientation);
-	setUpVector(up);*/
 
-	glutSolidTeapot(1);
+	glBegin(GL_QUADS);
+		glTexCoord2d(0,0);
+		glVertex3d(0,0,0);
+		glTexCoord2d(1,0);
+		glVertex3d(4,0,0);
+		glTexCoord2d(1,1);
+		glVertex3d(4,3,0);
+		glTexCoord2d(0,1);
+		glVertex3d(0,3,0);
+
+	glEnd();
 }

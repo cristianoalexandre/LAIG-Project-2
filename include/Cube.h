@@ -1,12 +1,10 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-
 #include "Primitive.h"
 #include "Rectangle.h"
 
-
-class MyCube: public CGFobject
+class MyCube: public Object
 {
 public:
 	MyCube();

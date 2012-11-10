@@ -179,8 +179,8 @@ void LineAnimation::initValues(){
 	total_delta_z = controlPoints->second->at(Z) - controlPoints->first->at(Z);
 
 	double dist_x = (double)powl(total_delta_x,2.0);
-	double	dist_y = (double)powl(total_delta_y,2.0);
-	double	dist_z = (double)powl(total_delta_z,2.0);
+	double dist_y = (double)powl(total_delta_y,2.0);
+	double dist_z = (double)powl(total_delta_z,2.0);
 
 	total_animation_distance = (double)sqrtl(dist_x + dist_y + dist_z);
 }

@@ -3,9 +3,10 @@
 
 #include "Object.h"
 
-class ExampleObject: public Object {
-	public:
-		void draw();
+class ExampleObject : public Object
+{
+public:
+    void draw();
 };
 
 #endif

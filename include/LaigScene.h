@@ -1,18 +1,46 @@
 #ifndef LAIGSCENE_H
 #define	LAIGSCENE_H
 
+#include "Plane.h"
+#include "Patch.h"
+#include "Tent.h"
+#include "Terrain.h"
+
 #include "CGFscene.h"
+#include "CGFappearance.h"
+#include "CGFaxis.h"
+#include "CGFapplication.h"
+#include "CGFobject.h"
+#include "CGFshader.h"
+#include "DemoShader.h"
 
 class LaigScene : public CGFscene
 {
 private:
-	static unsigned int tex_counter;
     bool use_display_lists;
+    static const long update_time = 30;
+
+    /** Lights declaration */
+    CGFlight * light0;
+
+    /** Appearances declaration */
+    CGFappearance* materialAppearance;
+    CGFappearance* textureAppearance;
+
+    /** Primitives declaration */
+    Plane * plane1;
+    Patch * patch1;
+    Patch * patch2;
+    Tent * tent1;
+    Terrain * terrain1;
+    
+    /** Shaders declaration */
+    DemoShader * shader1;
+
 public:
     void enableDisplayLists();
     void disableDisplayLists();
-    static void incrementTexCounter();
-    
+
     void init();
     void display();
     void update(long t);

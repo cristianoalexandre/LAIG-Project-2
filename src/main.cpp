@@ -9,6 +9,7 @@
 #include "CGFapplication.h"
 #include "TPscene.h"
 #include "DemoScene.h"
+#include "LaigScene.h"
 
 using std::cout;
 using std::exception;
@@ -22,7 +23,7 @@ int main(int argc, char* argv[])
     {
         app.init(&argc, argv);
 
-        app.setScene(new DemoScene());
+        app.setScene(new LaigScene());
         app.setInterface(new CGFinterface());
 
         app.run();

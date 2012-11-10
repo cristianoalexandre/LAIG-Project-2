@@ -23,25 +23,24 @@
 static vector<LineAnimation*> allLineAnimations;
 static vector<PolyLineAnimation*> allPolyAnimations;
 
-
 class DemoScene : public CGFscene
 {
 public:
-	void init();
-	void display();
-	void update(long t);
-	~DemoScene();
+    void init();
+    void display();
+    void update(long t);
+    ~DemoScene();
 private:
-	CGFlight* light0;
+    CGFlight* light0;
 
-	CGFappearance* materialAppearance;
-	CGFappearance* textureAppearance;
-	CGFshader* shader;
+    CGFappearance* materialAppearance;
+    CGFappearance* textureAppearance;
+    CGFshader* shader;
 
-	Object* obj;
-	Object* obj2;
-	vector<CGFobject*> sceneObjects;
-	//vector<LineAnimation*> sceneAnimations;
+    Object* obj;
+    Object* obj2;
+    vector<CGFobject*> sceneObjects;
+    //vector<LineAnimation*> sceneAnimations;
 };
 
 #endif

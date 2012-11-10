@@ -1,11 +1,8 @@
-
 #include <GL/glui.h>
 #include "RGBpixmap.h"
 #include <fstream>
 
 FILE *inf;
-
-
 
 void RGBpixmap::setTexture(GLuint textureName)
 {

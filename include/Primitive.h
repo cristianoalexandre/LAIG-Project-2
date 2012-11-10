@@ -1,7 +1,7 @@
 #ifndef PRIMITIVE_H
 #define	PRIMITIVE_H
 
-#include "CGFobject.h"
+#include "Object.h"
 
 #include <iostream>
 #include <string>
@@ -21,7 +21,7 @@ typedef struct
     float z;
 } Vertex3D;
 
-class Primitive
+class Primitive : public Object
 {
 private:
     string id;

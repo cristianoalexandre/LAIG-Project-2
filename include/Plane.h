@@ -1,20 +1,31 @@
 #ifndef PLANE_H
 #define	PLANE_H
 
-#include "CGFobject.h"
+#include "Object.h"
+#include "CGFappearance.h"
 
-class Plane : public CGFobject
+#include <iostream>
+#include <string>
+#include <cstring>
+
+using namespace std;
+
+typedef GLfloat vec3[3];
+typedef GLfloat vec2[2];
+
+class Plane : public Object
 {
 private:
-    GLfloat control_points[2][6];
-    GLfloat texture_points[2][6];
-    GLfloat normal_points[2][6];
-    GLint divisions[2];
-    
+    vec3 * control_points;
+    vec2 * texture_points;
+    int * divisions;
+    CGFappearance * appearance;
+
 public:
     Plane(GLint divisions_u = 10, GLint divisions_v = 10);
     ~Plane();
     void draw();
+    void setTexture(CGFappearance * appearance);
 };
 
 #endif	/* PLANE_H */
