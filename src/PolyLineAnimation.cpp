@@ -6,12 +6,16 @@ PolyLineAnimation::PolyLineAnimation(){
 	setAnimatedObject(NULL);
 	setTotalTime(0);
 	setTotalDistance(0);
+	ActivateAnimation(false);
+	setRepeatAnimation(false);
 }
 
-PolyLineAnimation::PolyLineAnimation(Object* obj, double tot_time){
+PolyLineAnimation::PolyLineAnimation(Object* obj, double tot_time, bool repeat, int reset_ind){
 
 	setAnimatedObject(obj);
 	setTotalTime(tot_time);
+	setRepeatAnimation(repeat);
+	setResetSegment(reset_ind);
 }
 
 PolyLineAnimation::~PolyLineAnimation(){
@@ -23,9 +27,24 @@ int PolyLineAnimation::getTotalTime(){
 	return this->total_time;
 }
 
+int PolyLineAnimation::getResetToSegment(){
+
+	return this->reset_to_segment;
+}
+
 double PolyLineAnimation::getTotalDistance(){
 
 	return this->total_distance;
+}
+
+bool PolyLineAnimation::getRepeatAnimation(){
+
+	return this->repeat_animation;
+}
+
+bool PolyLineAnimation::isAnimationActive(){
+
+	return this->active;
 }
 
 Object* PolyLineAnimation::getAnimatedObject(){
@@ -38,6 +57,11 @@ void PolyLineAnimation::setTotalTime(int totalTime){
 	this->total_time = totalTime;
 }
 
+void PolyLineAnimation::setResetSegment(int ind){
+
+	this->reset_to_segment = ind;
+}
+
 void PolyLineAnimation::setTotalDistance(double dist){
 
 	this->total_distance = dist;
@@ -46,6 +70,16 @@ void PolyLineAnimation::setTotalDistance(double dist){
 void PolyLineAnimation::setAnimatedObject(Object* ob){
 
 	this->obj = ob;
+}
+
+void PolyLineAnimation::setRepeatAnimation(bool repeat){
+
+	this->repeat_animation = repeat;
+}
+
+void PolyLineAnimation::ActivateAnimation(bool activ){
+
+	this->active = activ;
 }
 
 void PolyLineAnimation::initValues(Object* obj, vector<vector<double>*>* controlPoints, double totalTime){
@@ -65,7 +99,6 @@ void PolyLineAnimation::initValues(Object* obj, vector<vector<double>*>* control
 
 	init();
 }
-
 
 void PolyLineAnimation::init(){
 
@@ -94,7 +127,11 @@ int PolyLineAnimation::updateObjectPosition(){
 			current_animation_ind++;
 
 			if(current_animation_ind >= animSegments.size()){
-				//TODO reset();
+
+				if(this->repeat_animation){
+					reset();
+					cout << "reset done" << endl;
+				}
 			}else{
 				this->animSegments.at(current_animation_ind)->init();
 				cout << "attempting rotation" << endl;
@@ -103,7 +140,7 @@ int PolyLineAnimation::updateObjectPosition(){
 			}
 			
 		}	
-		if(current_animation_ind == 0 && obj->getAng_XZ() == 0){
+		if(current_animation_ind == 0 && obj->getAng_XZ() == 0){//to ensure object rotates properly before the first animation stint
 			rotateObject();
 		}
 	}
@@ -111,39 +148,7 @@ int PolyLineAnimation::updateObjectPosition(){
 	return 0;
 }
 
-
 void PolyLineAnimation::rotateObject(){
-
-	int octant;
-	if(obj->getPos_x() >= 0){
-		if(obj->getPos_z() >= 0){
-			if(obj->getPos_y() >= 0){
-				octant =1;
-			}else{
-				octant =5;
-			}
-		}else{
-			if(obj->getPos_y() >= 0){
-				octant =2;
-			}else{
-				octant =6;
-			}
-		}
-	}else{
-		if(obj->getPos_z() >= 0){
-			if(obj->getPos_y() >= 0){
-				octant =4;
-			}else{
-				octant =8;
-			}
-		}else{
-			if(obj->getPos_y() >= 0){
-				octant =3;
-			}else{
-				octant =7;
-			}
-		}
-	}
 
 	int orientation_x;
 	int orientation_z;
@@ -161,13 +166,8 @@ void PolyLineAnimation::rotateObject(){
 
 	double delta_x = fabs(animSegments.at(current_animation_ind)->getTotal_delta_x());
 	double delta_z = fabs(animSegments.at(current_animation_ind)->getTotal_delta_z());
-
 	double ang = atan2l(delta_z, delta_x) *180/PI;
-	/*cout << "delta_x = " << delta_x << endl;
-	cout << "delta_z = " << delta_z << endl;
 
-	cout << "ang_xz = " << ang << endl;
-	*/
 	if(delta_x != 0 || delta_z != 0){//IF BOTH ARE 0, ANGLE DOES NOT CHANGE AS THERE IS ONLY MOVEMENT IN THE YY AXIS DIRECTION
 
 		if(orientation_x < 0 && orientation_z < 0){//angle is calculated from the positive xx axis towards the object's path in the first quadrant
@@ -198,10 +198,8 @@ void PolyLineAnimation::rotateObject(){
 		}
 		animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnYYaxis(ang);	
 	}
-	//cout << "obj ang = " << animSegments.at(current_animation_ind)->getAnimatedObject()->getAng_XZ();
-	//cin.get();
+	
 }
-
 
 void PolyLineAnimation::animate(){
 
@@ -212,4 +210,16 @@ void PolyLineAnimation::animate(){
 		animSegments.at(animSegments.size() -1)->animate();
 	}
 
+}
+
+void PolyLineAnimation::reset(){
+
+	this->current_animation_ind = this->reset_to_segment;
+
+	obj->setPos_x(animSegments.at(current_animation_ind)->getObj_ini_postion_x());
+	obj->setPos_y(animSegments.at(current_animation_ind)->getObj_ini_postion_y());
+	obj->setPos_z(animSegments.at(current_animation_ind)->getObj_ini_postion_z());
+
+	animSegments.at(current_animation_ind)->init();
+	rotateObject();
 }

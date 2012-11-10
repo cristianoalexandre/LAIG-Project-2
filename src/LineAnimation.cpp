@@ -219,9 +219,6 @@ int LineAnimation::updateObjectPosition(){
 		fabs(animatedObject->getPos_z() -obj_ini_postion_z) >= fabs(total_delta_z)){
 			return 1;
 	}else{
-
-		//checkDeltas(delta_x, delta_y, delta_z);
-
 		animatedObject->updatePosition(this->delta_x, this->delta_y, this->delta_z);
 		return 0;
 	}
