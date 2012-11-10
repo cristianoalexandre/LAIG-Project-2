@@ -115,6 +115,21 @@ double LineAnimation::getObj_ini_postion_z() const{
 	return this->obj_ini_postion_z;
 }
 
+double LineAnimation::getObj_end_postion_x() const{
+
+	return this->obj_end_postion_x;
+}
+
+double LineAnimation::getObj_end_postion_y() const{
+
+	return this->obj_end_postion_y;
+}
+
+double LineAnimation::getObj_end_postion_z() const{
+
+	return this->obj_end_postion_z;
+}
+
 unsigned int LineAnimation::getMiliSecs(){
 
 	return LineAnimation::mili_secs;

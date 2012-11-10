@@ -1,5 +1,5 @@
 #include "Object.h"
-
+#include <iostream>
 
 
 Object::Object(){
@@ -42,7 +42,9 @@ void Object::setRotationAngleOnZZaxis(double ang){
 
 void Object::setRotationAngleOnYYaxis(double ang){
 
-	this->ang_XZ += ang;
+	
+	this->ang_XZ = ang;
+	
 }
 
 void Object::setOrientationVector(double vector[NUM_COORD]){
@@ -109,7 +111,7 @@ void Object::applyTransforms(){
 		glRotatef(this->ang_XY ,0,0,1);
 	}
 	if(ang_XZ != 0){
-		glRotatef(-1*this->ang_XZ ,0,1,0);
+		glRotatef(-this->ang_XZ ,0,1,0); //the - is there so that the rotation is CLOCKWISE
 	}
 	updateToPosition(px,py,pz);
 	

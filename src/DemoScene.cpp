@@ -1,42 +1,18 @@
 #include "DemoScene.h"
-#include "CGFaxis.h"
-#include "CGFapplication.h"
 
-#include "ExampleObject.h"
+unsigned int LineAnimation::mili_secs = 0;
 
-#include <math.h>
 
-#include "CGFappearance.h"
-#include "Cylinder.h"
-#include "Triangle.h"
-#include "Sphere.h"
+void updateTransforms(int dummy){
 
-unsigned int mili_secs = 10;
-double  obj_radius, obj_rotate, delta_radius, delta_rotate;
-#define RADIUS_SPEED  0.4  // unidades de comprimento por segundo
-#define ANGULAR_SPEED 0.5  // rotacoes por segundo
 
-void myInitTransforms()
-{
-	delta_rotate = (double) mili_secs/1000.0 * ANGULAR_SPEED *360.0;
-	delta_radius = (double) mili_secs/1000.0 * RADIUS_SPEED;
+	for(unsigned int i = 0; i < allPolyAnimations.size(); i++){
+
+		allPolyAnimations[i]->updateObjectPosition();
+	}
+
+	glutTimerFunc(LineAnimation::getMiliSecs(),updateTransforms,dummy);
 }
-
-void myUpdateTransforms(int dummy)
-{
-
-	obj_rotate += delta_rotate;
-	obj_radius += delta_radius;
-
-	glutTimerFunc(mili_secs, myUpdateTransforms, 0);
-}
-
-void myObjectTransforms()
-{
-	glRotated(obj_rotate, 0,1,0);
-	glTranslated(obj_radius,0.0,0.0);
-}
-
 
 
 void myGlutIdle( void )
@@ -82,13 +58,57 @@ void DemoScene::init()
     // Defines a default normal
     glNormal3f(0, 0, 1);
 
-    obj = new ExampleObject();
+	LineAnimation::setMiliSecs(45);
+	double x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
+	vector<vector<double>*>* ctrPoints = new vector<vector<double>*>();
+	vector<double>* p1 = new vector<double>();
+	x1 = 0.0;
+	y1 = 0.0;
+	z1 = 0.0;
+	p1->push_back(x1);
+	p1->push_back(y1);
+	p1->push_back(z1);
+	ctrPoints->push_back(p1);
+	vector<double>* p2 = new vector<double>();
+	x2 = 5.0;
+	y2 = 0.0;
+	z2 = 0.0;
+	p2->push_back(x2);
+	p2->push_back(y2);
+	p2->push_back(z2);
+	ctrPoints->push_back(p2);
+	vector<double>* p3 = new vector<double>();
+	x3 = 5.0;
+	y3 = 5.0;
+	z3 = 0.0;
+	p3->push_back(x3);
+	p3->push_back(y3);
+	p3->push_back(z3);
+	ctrPoints->push_back(p3);
+	vector<double>* p4 = new vector<double>();
+	x4 = 5.0;
+	y4 = 5.0;
+	z4 = 5.0;
+	p4->push_back(x4);
+	p4->push_back(y4);
+	p4->push_back(z4);
+	ctrPoints->push_back(p4);
+
+	
+	obj = new ExampleObject();
+	PolyLineAnimation* poly = new PolyLineAnimation();
+	poly->initValues(obj, ctrPoints, 10);
+
+	allPolyAnimations.push_back(poly);
+
+	glutTimerFunc(LineAnimation::getMiliSecs(), updateTransforms, 0);
+
+	
    // materialAppearance = new CGFappearance();
     //textureAppearance = new CGFappearance("./textures/pyramid.jpg", GL_REPEAT, GL_REPEAT);
     //shader = new CGFshader("./shaders/texshader.vert", "./shaders/texshader.frag");
-	glutTimerFunc(mili_secs, myUpdateTransforms, 0);
-	GLUI_Master.set_glutIdleFunc(myGlutIdle);
-	myInitTransforms();
+	
+	//GLUI_Master.set_glutIdleFunc(myGlutIdle);
     setUpdatePeriod(30);
 }
 
@@ -111,7 +131,7 @@ void DemoScene::display()
     // Initialize Model-View matrix as identity (no transformation
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
+	
     // Apply transformations corresponding to the camera position relative to the origin
     CGFscene::activeCamera->applyView();
 
@@ -121,8 +141,11 @@ void DemoScene::display()
     // Draw axis
     axis.draw();
 
-	myObjectTransforms();
-	obj->draw();
+	for(unsigned int i = 0; i < allPolyAnimations.size(); i++){
+
+		allPolyAnimations[i]->animate();
+	}
+
 
     // ---- END Background, camera and axis setup
 
@@ -146,7 +169,7 @@ void DemoScene::display()
     //shader->bind();
     //obj->draw();
     //shader->unbind();
-
+	//glPopMatrix();
 
     // ---- END feature demos
 

@@ -104,7 +104,6 @@ int PolyLineAnimation::updateObjectPosition(){
 			
 		}	
 		if(current_animation_ind == 0 && obj->getAng_XZ() == 0){
-
 			rotateObject();
 		}
 	}
@@ -115,84 +114,92 @@ int PolyLineAnimation::updateObjectPosition(){
 
 void PolyLineAnimation::rotateObject(){
 
-	/*
-	double prev_vector_x = 0;
-	double prev_vector_y = 0;
-	double prev_vector_z = 0;
-	int ind = current_animation_ind -1;
-
-	while(prev_vector_x == 0 && ind >= 0){
-
-		prev_vector_x = animSegments.at(ind)->getTotal_delta_x();
-		ind--;
-	}
-	
-	cout << "prev_vector_x = " << prev_vector_x << endl;
-		cout << "prev_vector_y = " << prev_vector_y << endl;
-		cout << "prev_vector_z = " << prev_vector_z << endl;
-		cout << "ind = " << ind << endl;
-		
-	double prev_vector_x = animSegments.at(current_animation_ind -1)->getTotal_delta_x();
-	double prev_vector_y = animSegments.at(current_animation_ind -1)->getTotal_delta_y();
-	double prev_vector_z = animSegments.at(current_animation_ind -1)->getTotal_delta_z();
-	
-	prev_vector_x = 1;
-	prev_vector_y = 0;
-	prev_vector_z = 0;
-	
-	double current_vector_x = animSegments.at(current_animation_ind)->getTotal_delta_x();
-	double current_vector_y = animSegments.at(current_animation_ind)->getTotal_delta_y();
-	double current_vector_z = animSegments.at(current_animation_ind)->getTotal_delta_z();
-
-
-	double scalar_product_XY = (prev_vector_x*current_vector_x) + (prev_vector_y*current_vector_y);
-	double scalar_product_XZ = (prev_vector_x*current_vector_x) + (prev_vector_z*current_vector_z);
-
-	double prev_normal_XY = sqrtl(powl(prev_vector_x,2.0) + powl(prev_vector_y,2.0));
-	double prev_normal_XZ = sqrtl(powl(prev_vector_x,2.0) +	powl(prev_vector_z,2.0));
-		
-	double curr_normal_XY = sqrtl(powl(prev_vector_x,2.0) + powl(prev_vector_y,2.0));
-	double curr_normal_XZ = sqrtl(powl(prev_vector_x,2.0) + powl(prev_vector_y,2.0));
-
-	double cosAng_XY = scalar_product_XY/(prev_normal_XY * curr_normal_XY);
-	double cosAng_XZ = scalar_product_XZ/(prev_normal_XZ * curr_normal_XZ);
-
-
-	double ang_XY = 0; //NOT BEING USED RIGHT NOW,
-	double ang_XZ;
-
-	/*if(current_vector_y == 0){
-		ang_XY = 0;
+	int octant;
+	if(obj->getPos_x() >= 0){
+		if(obj->getPos_z() >= 0){
+			if(obj->getPos_y() >= 0){
+				octant =1;
+			}else{
+				octant =5;
+			}
+		}else{
+			if(obj->getPos_y() >= 0){
+				octant =2;
+			}else{
+				octant =6;
+			}
+		}
 	}else{
-		ang_XY = acosl(cosAng_XY) * 180/PI;
+		if(obj->getPos_z() >= 0){
+			if(obj->getPos_y() >= 0){
+				octant =4;
+			}else{
+				octant =8;
+			}
+		}else{
+			if(obj->getPos_y() >= 0){
+				octant =3;
+			}else{
+				octant =7;
+			}
+		}
 	}
 
-	if(current_vector_z == 0){
-		ang_XZ = 0;
+	int orientation_x;
+	int orientation_z;
+
+	if(animSegments.at(current_animation_ind)->getObj_ini_postion_z() < animSegments.at(current_animation_ind)->getObj_end_postion_z()){
+		orientation_z = 1;
 	}else{
-		ang_XZ = acosl(cosAng_XZ) * 180/PI;
+		orientation_z = -1;
+	}
+	if(animSegments.at(current_animation_ind)->getObj_ini_postion_x() < animSegments.at(current_animation_ind)->getObj_end_postion_x()){
+		orientation_x = 1;
+	}else{
+		orientation_x = -1;
 	}
 
-	animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnZZaxis(ang_XY);
-	animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnYYaxis(ang_XZ);
-	//cout << "ang_XY = " << ang_XY << endl;
-	cout << "cosAng_XZ = " << cosAng_XZ << endl;
-	cout << "ang_XZ = " << ang_XZ << endl;
-	cin.get();*/
+	double delta_x = fabs(animSegments.at(current_animation_ind)->getTotal_delta_x());
+	double delta_z = fabs(animSegments.at(current_animation_ind)->getTotal_delta_z());
 
-
-	double delta_x = animSegments.at(current_animation_ind)->getTotal_delta_x();
-	double delta_z = animSegments.at(current_animation_ind)->getTotal_delta_z();
-
-	double ang = atan2l(delta_x, delta_z) *180/PI;
-
-	cout << "delta_x = " << delta_x << endl;
+	double ang = atan2l(delta_z, delta_x) *180/PI;
+	/*cout << "delta_x = " << delta_x << endl;
 	cout << "delta_z = " << delta_z << endl;
 
 	cout << "ang_xz = " << ang << endl;
-	animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnYYaxis(ang);
-	cout << "obj ang = " << animSegments.at(current_animation_ind)->getAnimatedObject()->getAng_XZ();
-	cin.get();
+	*/
+	if(delta_x != 0 || delta_z != 0){//IF BOTH ARE 0, ANGLE DOES NOT CHANGE AS THERE IS ONLY MOVEMENT IN THE YY AXIS DIRECTION
+
+		if(orientation_x < 0 && orientation_z < 0){//angle is calculated from the positive xx axis towards the object's path in the first quadrant
+			ang += 180;							   //these calculations correct the angle in case the object moves to or is in other quadrants
+		}else{
+			if(orientation_x < 0){
+				ang = ang + (180 - (2*ang));
+			}
+			if (orientation_z < 0){
+				ang = ang * -1;
+			}
+		}
+
+		if(delta_x == 0){//IF ONLY DELTA_X IS 0, THEN ANGLE IS EITHER 90 OR -90 DEPENDING ON DIRECTION OF MOVEMENT
+			if(animSegments.at(current_animation_ind)->getObj_ini_postion_z() < animSegments.at(current_animation_ind)->getObj_end_postion_z()){
+				ang = 90;
+			}else{
+				ang = -90;
+			}		
+		}else{
+			if(delta_z == 0){// IF ONLY DELTA_Z IS 0, THEN ANGLE IS EITHER 0 OR 180 DEPENDING ON DIRECTION OF MOVEMENT
+				if(animSegments.at(current_animation_ind)->getObj_ini_postion_x() < animSegments.at(current_animation_ind)->getObj_end_postion_x()){
+					ang = 0;
+				}else{
+					ang = 180;
+				}
+			}
+		}
+		animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnYYaxis(ang);	
+	}
+	//cout << "obj ang = " << animSegments.at(current_animation_ind)->getAnimatedObject()->getAng_XZ();
+	//cin.get();
 }
 
 
