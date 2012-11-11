@@ -19,12 +19,13 @@ private:
     vec3 * control_points;
     vec2 * texture_points;
     int * divisions;
-    
+    CGFappearance * appearance;
+
 public:
     Plane(GLint divisions_u = 10, GLint divisions_v = 10);
     ~Plane();
     void draw();
-    
+    void setTexture(CGFappearance * appearance);
 };
 
 #endif	/* PLANE_H */

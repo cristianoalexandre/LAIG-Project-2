@@ -91,6 +91,11 @@ void Plane::draw()
         glCullFace(cull_face_mode);
 }
 
+void Plane::setTexture(CGFappearance * appearance)
+{
+    this->appearance = appearance;
+}
+
 Plane::~Plane()
 {
     delete control_points;

@@ -1,8 +1,5 @@
 #include "LineAnimation.h"
 
-
-
-
 LineAnimation::LineAnimation(){
 	
 	setDelta_x(0.0);
@@ -177,10 +174,9 @@ void LineAnimation::initValues(){
 	total_delta_x = controlPoints->second->at(X) - controlPoints->first->at(X);
 	total_delta_y = controlPoints->second->at(Y) - controlPoints->first->at(Y);
 	total_delta_z = controlPoints->second->at(Z) - controlPoints->first->at(Z);
-
 	double dist_x = (double)powl(total_delta_x,2.0);
-	double dist_y = (double)powl(total_delta_y,2.0);
-	double dist_z = (double)powl(total_delta_z,2.0);
+	double	dist_y = (double)powl(total_delta_y,2.0);
+	double	dist_z = (double)powl(total_delta_z,2.0);
 
 	total_animation_distance = (double)sqrtl(dist_x + dist_y + dist_z);
 }
@@ -195,7 +191,7 @@ void LineAnimation::init(){
 	obj_ini_postion_x = this->animatedObject->getPos_x();
 	obj_ini_postion_y = this->animatedObject->getPos_y();
 	obj_ini_postion_z = this->animatedObject->getPos_z();
-
+	
 	obj_end_postion_x = obj_ini_postion_x + total_delta_x;
 	obj_end_postion_y = obj_ini_postion_y + total_delta_y;
 	obj_end_postion_z = obj_ini_postion_z + total_delta_z;	

@@ -8,8 +8,8 @@ Patch::Patch()
 Patch::Patch(int order_u, int order_v, int divisions_u, int divisions_v, GLfloat control_points[][3], int lin, int col)
 {
     /** Sets appearance to NULL */
-    this->appearance = NULL;
-
+   // this->appearance = NULL;
+	setTexture(NULL);
     /** Allocates memory for all the arrays */
     int size_of_array_u = 0;
     int size_of_array_v = 0;
@@ -95,8 +95,8 @@ Patch::Patch(int order_u, int order_v, int divisions_u, int divisions_v, GLfloat
 void Patch::draw()
 {
     /** Applies the appearance */
-    if (appearance != NULL)
-        appearance->apply();
+	if (getTexture() != NULL)
+		getTexture()->apply();
 
     GLint cull_face_mode;
     glGetIntegerv(GL_CULL_FACE_MODE, &cull_face_mode);

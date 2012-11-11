@@ -2,6 +2,15 @@
 
 FlyingDisk::FlyingDisk()
 {
+
+	setPos_x(0.0);
+	setPos_y(0.0);
+	setPos_z(0.0);
+	setRotationAngleOnXXaxis(0.0);
+	setRotationAngleOnYYaxis(0.0);
+	setRotationAngleOnZZaxis(0.0);
+
+	setAnimated(false);
     /** Defines control points */
     GLfloat control_points[][3] = {
         {-3 + 0.3, 0, 3},
@@ -28,9 +37,9 @@ FlyingDisk::FlyingDisk()
     topPart = new Patch(3, 3, 20, 20, control_points, 16, 3);
     disk = new Cylinder(9, 9, 0.5, 255, 10);
     
-    diskBottomAppearance = new CGFappearance("./textures/disk_down.png",GL_CLAMP,GL_CLAMP);
-    diskTopAppearance = new CGFappearance("./textures/disk_up.png", GL_CLAMP,GL_CLAMP);
-    topAppearance = new CGFappearance("./textures/top.png", GL_CLAMP,GL_CLAMP);
+    diskBottomAppearance = new CGFappearance("../textures/disk_down.png",GL_CLAMP,GL_CLAMP);
+    diskTopAppearance = new CGFappearance("../textures/disk_up.png", GL_CLAMP,GL_CLAMP);
+    topAppearance = new CGFappearance("../textures/top.png", GL_CLAMP,GL_CLAMP);
     
     topPart->setTexture(topAppearance);
     disk->setBottomTexture(diskBottomAppearance);

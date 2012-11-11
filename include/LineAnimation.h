@@ -7,7 +7,6 @@
 #include <vector>
 #include <iostream>
 #include <map>
-#include <cmath>
 
 
 using namespace std;
@@ -75,10 +74,10 @@ public:
 	double getObj_ini_postion_x() const;
 	double getObj_ini_postion_y() const;
 	double getObj_ini_postion_z() const;
-        
-        double getObj_end_postion_x() const;
-        double getObj_end_postion_y() const;
-        double getObj_end_postion_z() const;
+
+	double getObj_end_postion_x() const;
+	double getObj_end_postion_y() const;
+	double getObj_end_postion_z() const;
 
 	double getTotalAnimationTime() const;
 	double getTotalAnimationDistance() const;

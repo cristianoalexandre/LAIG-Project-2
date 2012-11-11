@@ -1,145 +1,155 @@
 #include "Object.h"
-#include <iostream>
 
-Object::Object()
-{
 
-    appearance = NULL;
-    setPos_x(0.0);
-    setPos_y(0.0);
-    setPos_z(0.0);
-    ang_XY = 0;
-    ang_XZ = 0;
-    setAnimated(false);
+Object::Object(){
+
+	setPos_x(0.0);
+	setPos_y(0.0);
+	setPos_z(0.0);
+	ang_XY = 0;
+	ang_XZ = 0;
+	setAnimated(false);
 }
 
-Object::~Object()
-{
-
+Object::~Object(){
 }
 
-void Object::setPos_x(double x)
-{
+void Object::setPos_x(double x){
 
-    this->pos_x = x;
+	this->pos_x = x;
 }
 
-void Object::setPos_y(double y)
-{
+void Object::setPos_y(double y){
 
-    this->pos_y = y;
+	this->pos_y = y;
 }
 
-void Object::setPos_z(double z)
-{
+void Object::setPos_z(double z){
 
-    this->pos_z = z;
+	this->pos_z = z;
 }
 
-void Object::setAnimated(bool anim)
-{
+void Object::setAnimated(bool anim){
 
-    this->animate = anim;
+	this->animate = anim;
 }
 
-void Object::setRotationAngleOnZZaxis(double ang)
-{
+void Object::setRotationAngleOnZZaxis(double ang){
 
-    this->ang_XY = ang;
+	this->ang_XY = ang;
 }
 
-void Object::setRotationAngleOnYYaxis(double ang)
-{
+void Object::setRotationAngleOnXXaxis(double ang){
 
-
-    this->ang_XZ = ang;
-
+	this->ang_ZY = ang;
 }
 
-void Object::setOrientationVector(double vector[NUM_COORD])
-{
+void Object::setRotationAngleOnYYaxis(double ang){
 
-    this->orientation_vector[X] = vector[X];
-    this->orientation_vector[Y] = vector[Y];
-    this->orientation_vector[Z] = vector[Z];
+	
+	this->ang_XZ = ang;
+	
 }
 
-double Object::getPos_x()
-{
+void Object::setOrientationVector(double vector[NUM_COORD]){
 
-    return this->pos_x;
+	this->orientation_vector[X] = vector[X];
+	this->orientation_vector[Y] = vector[Y];
+	this->orientation_vector[Z] = vector[Z];
 }
 
-double Object::getPos_y()
-{
+double Object::getPos_x(){
 
-    return this->pos_y;
+	return this->pos_x;
 }
 
-double Object::getPos_z()
-{
+double Object::getPos_y(){
 
-    return this->pos_z;
+	return this->pos_y;
 }
 
-double Object::getAng_XZ()
-{
+double Object::getPos_z(){
 
-    return this->ang_XZ;
+	return this->pos_z;
 }
 
-double* Object::getOrientationVector()
-{
+double Object::getAng_XZ(){
 
-    return this->orientation_vector;
+	return this->ang_XZ;
 }
 
-bool Object::getAnimated()
-{
+double Object::getAng_XY(){
 
-    return this->animate;
+	return this->ang_XY;
 }
 
-void Object::updateToPosition(double x, double y, double z)
-{
+double Object::getAng_ZY(){
 
-    setPos_x(x);
-    setPos_y(y);
-    setPos_z(z);
+	return this->ang_ZY;
 }
 
-void Object::updatePosition(double delta_x, double delta_y, double delta_z)
-{
+double* Object::getOrientationVector(){
 
-    setPos_x(this->pos_x + delta_x);
-    setPos_y(this->pos_y + delta_y);
-    setPos_z(this->pos_z + delta_z);
+	return this->orientation_vector;
 }
 
-void Object::applyTransforms()
-{
+bool Object::getAnimated(){
 
-    glTranslated(this->pos_x, this->pos_y, this->pos_z);
-    double px, py, pz;
-    px = getPos_x();
-    py = getPos_y();
-    pz = getPos_z();
-
-    updateToPosition(0, 0, 0);
-    if (ang_XY != 0)
-    {
-        glRotatef(this->ang_XY, 0, 0, 1);
-    }
-    if (ang_XZ != 0)
-    {
-        glRotatef(-this->ang_XZ, 0, 1, 0); //the - is there so that the rotation is CLOCKWISE
-    }
-    updateToPosition(px, py, pz);
-
+	return this->animate;
 }
 
-void Object::setTexture(CGFappearance* appearance)
-{
+CGFappearance* Object::getTexture(){
+
+	return this->appearance;
+}
+
+void Object::updateToPosition(double x, double y, double z){
+
+	setPos_x(x);
+	setPos_y(y);
+	setPos_z(z);
+}
+
+void Object::updatePosition(double delta_x, double delta_y, double delta_z){
+
+	setPos_x(this->pos_x + delta_x);
+	setPos_y(this->pos_y + delta_y);
+	setPos_z(this->pos_z + delta_z);
+}
+
+void Object::applyTransforms(){
+
+	glTranslated(this->pos_x, this->pos_y, this->pos_z);
+	double px,py,pz;
+	px = getPos_x();
+	py = getPos_y();
+	pz = getPos_z();
+
+	updateToPosition(0,0,0);
+	if(ang_XY != 0 && ang_ZY != 0){
+		if(ang_XZ != 0){
+			glRotatef(-this->ang_XZ ,0,1,0); //the - is there so that the rotation is CLOCKWISE
+		}
+		glRotatef(ang_XY,0,0,1);
+	}else{
+		if(ang_XY != 0){
+			glRotatef(this->ang_XY,0,0,1); 
+		}
+		if(ang_ZY != 0){
+			glRotatef(this->ang_ZY,1,0,0); 
+		}
+		if(ang_XZ != 0){
+			glRotatef(-this->ang_XZ ,0,1,0); //the - is there so that the rotation is CLOCKWISE
+		}
+	}
+
+	updateToPosition(px,py,pz);
+	
+	
+}
+
+void Object::setTexture(CGFappearance* appearance){
+
     this->appearance = appearance;
 }
 

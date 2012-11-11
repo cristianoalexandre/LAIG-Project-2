@@ -83,7 +83,7 @@ void PolyLineAnimation::ActivateAnimation(bool activ){
 }
 
 void PolyLineAnimation::initValues(Object* obj, vector<vector<double>*>* controlPoints, double totalTime){
-	
+
 	setAnimatedObject(obj);
 	setTotalTime(totalTime);
 
@@ -96,18 +96,17 @@ void PolyLineAnimation::initValues(Object* obj, vector<vector<double>*>* control
 
 		this->animSegments.push_back(anim);
 	}
-
 	init();
 }
 
 void PolyLineAnimation::init(){
 
 	for(unsigned int i = 0; i < animSegments.size(); i++){
-
+		
 		animSegments.at(i)->setAnimatedObject(this->obj);
 		animSegments.at(i)->initValues();
-
 		total_distance += animSegments.at(i)->getTotalAnimationDistance();
+		
 	}
 	for(unsigned int i = 0; i < animSegments.size(); i++){
 
@@ -134,9 +133,9 @@ int PolyLineAnimation::updateObjectPosition(){
 				}
 			}else{
 				this->animSegments.at(current_animation_ind)->init();
-				cout << "attempting rotation" << endl;
+				
 				rotateObject();
-				cout << "rotation complete" << endl;
+				
 			}
 			
 		}	
@@ -151,6 +150,7 @@ int PolyLineAnimation::updateObjectPosition(){
 void PolyLineAnimation::rotateObject(){
 
 	int orientation_x;
+	int orientation_y;
 	int orientation_z;
 
 	if(animSegments.at(current_animation_ind)->getObj_ini_postion_z() < animSegments.at(current_animation_ind)->getObj_end_postion_z()){
@@ -163,42 +163,97 @@ void PolyLineAnimation::rotateObject(){
 	}else{
 		orientation_x = -1;
 	}
+	if(animSegments.at(current_animation_ind)->getObj_ini_postion_y() < animSegments.at(current_animation_ind)->getObj_end_postion_y()){
+		orientation_y = 1;
+	}else{
+		orientation_y = -1;
+	}
 
 	double delta_x = fabs(animSegments.at(current_animation_ind)->getTotal_delta_x());
+	double delta_y = fabs(animSegments.at(current_animation_ind)->getTotal_delta_y());
 	double delta_z = fabs(animSegments.at(current_animation_ind)->getTotal_delta_z());
-	double ang = atan2l(delta_z, delta_x) *180/PI;
+
+	double ang_XZ = atan2l(delta_z, delta_x) *180/PI;
+	double ang_XY;
+	double ang_ZY;
 
 	if(delta_x != 0 || delta_z != 0){//IF BOTH ARE 0, ANGLE DOES NOT CHANGE AS THERE IS ONLY MOVEMENT IN THE YY AXIS DIRECTION
 
 		if(orientation_x < 0 && orientation_z < 0){//angle is calculated from the positive xx axis towards the object's path in the first quadrant
-			ang += 180;							   //these calculations correct the angle in case the object moves to or is in other quadrants
+			ang_XZ += 180;							   //these calculations correct the angle in case the object moves to or is in other quadrants
 		}else{
 			if(orientation_x < 0){
-				ang = ang + (180 - (2*ang));
+				ang_XZ = ang_XZ + (180 - (2*ang_XZ));
 			}
 			if (orientation_z < 0){
-				ang = ang * -1;
+				ang_XZ = ang_XZ * -1;
 			}
 		}
 
 		if(delta_x == 0){//IF ONLY DELTA_X IS 0, THEN ANGLE IS EITHER 90 OR -90 DEPENDING ON DIRECTION OF MOVEMENT
 			if(animSegments.at(current_animation_ind)->getObj_ini_postion_z() < animSegments.at(current_animation_ind)->getObj_end_postion_z()){
-				ang = 90;
+				ang_XZ = 90;
 			}else{
-				ang = -90;
+				ang_XZ = -90;
 			}		
 		}else{
 			if(delta_z == 0){// IF ONLY DELTA_Z IS 0, THEN ANGLE IS EITHER 0 OR 180 DEPENDING ON DIRECTION OF MOVEMENT
 				if(animSegments.at(current_animation_ind)->getObj_ini_postion_x() < animSegments.at(current_animation_ind)->getObj_end_postion_x()){
-					ang = 0;
+					ang_XZ = 0;
 				}else{
-					ang = 180;
+					ang_XZ = 180;
 				}
 			}
 		}
-		animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnYYaxis(ang);	
+		animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnYYaxis(ang_XZ);	
+	}
+	double delta_w;
+	if(delta_y == 0){
+		ang_XY = 0;
+		ang_ZY = 0;
+	}else{
+		if(delta_x == 0 && delta_z == 0){
+			ang_XY = -90;
+			ang_ZY = -90;
+		}else{
+			if(delta_x == 0){
+				delta_w = delta_z;
+				ang_ZY = atan2l(delta_y, delta_w) * (180/PI);
+				ang_XY = 0;
+			}else{
+				if(delta_z == 0){
+					delta_w = delta_x;
+					ang_XY = atan2l(delta_y, delta_w) * (180/PI);
+					ang_ZY = 0;
+				}else{
+					delta_w = sqrtl(powl(delta_x,2.0) + powl(delta_z,2.0));
+					ang_XY = atan2l(delta_y, delta_w) * (180/PI);
+					ang_ZY = atan2l(delta_y, delta_w) * (180/PI);
+				}
+			}
+			
+		}	
+	}
+	if(orientation_y < 0){
+		if(orientation_x < 0 && delta_z == 0){
+			ang_XY =  ang_XY *-1;
+		}
+		ang_XY = ang_XY * -1;
+		ang_ZY = ang_ZY * -1;
+		
+	}else{
+		if(orientation_z > 0){
+			ang_ZY = ang_ZY *-1;
+		}else{
+			if(orientation_x < 0){
+				ang_XY = ang_XY * -1;
+			}
+		}
 	}
 	
+	animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnXXaxis(ang_ZY);	
+	animSegments.at(current_animation_ind)->getAnimatedObject()->setRotationAngleOnZZaxis(ang_XY);	
+		
 }
 
 void PolyLineAnimation::animate(){

@@ -21,7 +21,7 @@ typedef struct
     float z;
 } Vertex3D;
 
-class Primitive : public Object
+class Primitive: public Object
 {
 private:
     string id;
