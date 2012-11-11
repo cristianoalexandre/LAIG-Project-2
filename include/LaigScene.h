@@ -49,6 +49,8 @@ private:
     CGFlight * light2;
     CGFlight * light3;
 
+	GLuint cena;
+
     /** Appearances declaration */
     CGFappearance* materialAppearance;
     CGFappearance* textureAppearance;
@@ -62,7 +64,7 @@ private:
     Terrain * terrain1;
     FlyingDisk * spaceDisk;
 
-	Object* obj;
+	Object* obj; //TESTING PURPOSES
     
     /** Shaders declaration */
     DemoShader * shader1;

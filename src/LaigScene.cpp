@@ -190,9 +190,7 @@ void LaigScene::init()
 	p7->push_back(z1);
 	ctrPoints->push_back(p7);
 	
-	obj = new ExampleObject();	
 	PolyLineAnimation* poly = new PolyLineAnimation();
-	//Animation* poly = new PolyLineAnimation();
 	poly->initValues(spaceDisk, ctrPoints, 30);
 	poly->setRepeatAnimation(true);
 	poly->setResetSegment(2);
@@ -221,13 +219,24 @@ void LaigScene::init()
 		ctrPoints->push_back(p1);
 	}
 	cin.get();*/
+
+	cena = 50;
+	glNewList(cena,GL_COMPILE_AND_EXECUTE);
+		glPushMatrix();
+			glPushMatrix();
+				glScalef(2,0.5,1);
+				glTranslatef(-5,0,20);
+				tent1->draw();
+			glPopMatrix();
+			glPushMatrix();
+				glScalef(50, 2, 50);
+				shader1->bind();
+				terrain1->draw();
+				shader1->unbind();			
+			glPopMatrix();
+		glPopMatrix();
+	glEndList();
 	glutTimerFunc(LineAnimation::getMiliSecs(), updateTransforms, 0);
-    //materialAppearance = new CGFappearance();
-    //textureAppearance = new CGFappearance("./textures/pyramid.jpg", GL_REPEAT, GL_REPEAT);
-    //shader = new CGFshader("./shaders/texshader.vert", "./shaders/texshader.frag");
-	
-	//GLUI_Master.set_glutIdleFunc(myGlutIdle);
-    //setUpdatePeriod(10);
 }
 
 void LaigScene::display()
@@ -263,23 +272,8 @@ void LaigScene::display()
 	for(unsigned int i = 0; i < allPolyAnimations.size(); i++){
 		allPolyAnimations[i]->animate();
 	}
-
-
-    glPushMatrix();
-		//glTranslatef(3, 0, 3);
-		glPushMatrix();
-			glScalef(2,0.5,1);
-			glTranslatef(-5,0,20);
-			tent1->draw();
-		glPopMatrix();
-		glPushMatrix();
-			//glTranslatef(9, 0, 6);
-			glScalef(50, 2, 50);
-			shader1->bind();
-			terrain1->draw();
-			shader1->unbind();			
-		glPopMatrix();
-    glPopMatrix();
+	
+	glCallList(cena);
 
     glutSwapBuffers();
 }
