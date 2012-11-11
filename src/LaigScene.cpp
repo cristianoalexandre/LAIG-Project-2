@@ -73,29 +73,7 @@ void LaigScene::init()
 
     /** Defines a default normal */
     glNormal3f(0, 0, 1);
-	/*
 	
-	LineAnimation::setMiliSecs(10);
-	double x1 = 0, y1 = 0, z1 = 0;
-	vector<vector<double>*>* ctrPoints = new vector<vector<double>*>();
-	double inc = 0.01;
-	for(double i = 0; i <= 1000; i++){
-
-		vector<double>* p1 = new vector<double>;
-			
-		x1 = 5 - 5* cosl(2*PI -(2*PI) * (i/1000));
-		z1 = 5* sinl(0 -(PI*2) * (i/1000));
-
-		cout << "x1 = " << x1 << endl;
-		cout << "z1 = " << z1 << endl;
-
-		p1->push_back(x1);
-		p1->push_back(y1);
-		p1->push_back(z1);
-		ctrPoints->push_back(p1);
-	}
-	cin.get();*/
-
     /** Declares the usage of display lists */
     //use_display_lists = false;
 
@@ -153,7 +131,7 @@ void LaigScene::init()
 
 	LineAnimation::setMiliSecs(10);
 	
-	double x1, y1, z1;
+	double x1 = 0, y1 = 0, z1 = 0;
 	vector<vector<double>*>* ctrPoints = new vector<vector<double>*>();
 	vector<double>* p1 = new vector<double>();
 	x1 = 0.0;
@@ -164,49 +142,49 @@ void LaigScene::init()
 	p1->push_back(z1);
 	ctrPoints->push_back(p1);
 	vector<double>* p2 = new vector<double>();
-	x1 = 0.0;
+	x1 = 10.0;
 	y1 = 0.0;
-	z1 = 5.0;
+	z1 = 0.0;
 	p2->push_back(x1);
 	p2->push_back(y1);
 	p2->push_back(z1);
 	ctrPoints->push_back(p2);
 	vector<double>* p3 = new vector<double>();
-	x1 = 5.0;
+	x1 = 10.0;
 	y1 = 5.0;
-	z1 = 5.0;
+	z1 = -20.0;
 	p3->push_back(x1);
 	p3->push_back(y1);
 	p3->push_back(z1);
 	ctrPoints->push_back(p3);
 	vector<double>* p4 = new vector<double>();
-	x1 = 5.0;
+	x1 = -10.0;
 	y1 = 5.0;
-	z1 = -5.0;
+	z1 = -20.0;
 	p4->push_back(x1);
 	p4->push_back(y1);
 	p4->push_back(z1);
 	ctrPoints->push_back(p4);
 	vector<double>* p5 = new vector<double>();
-	x1 = -5.0;
+	x1 = -10.0;
 	y1 = 5.0;
-	z1 = -5.0;
+	z1 = 0.0;
 	p5->push_back(x1);
 	p5->push_back(y1);
 	p5->push_back(z1);
 	ctrPoints->push_back(p5);
 	vector<double>* p6 = new vector<double>();
-	x1 = -5.0;
+	x1 = 10.0;
 	y1 = 5.0;
-	z1 = 5.0;
+	z1 = 0.0;
 	p6->push_back(x1);
 	p6->push_back(y1);
 	p6->push_back(z1);
 	ctrPoints->push_back(p6);
 	vector<double>* p7 = new vector<double>();
-	x1 = 5.0;
+	x1 = 10.0;
 	y1 = 5.0;
-	z1 = 5.0;
+	z1 = -20.0;
 	p7->push_back(x1);
 	p7->push_back(y1);
 	p7->push_back(z1);
@@ -215,11 +193,34 @@ void LaigScene::init()
 	obj = new ExampleObject();	
 	PolyLineAnimation* poly = new PolyLineAnimation();
 	//Animation* poly = new PolyLineAnimation();
-	poly->initValues(spaceDisk, ctrPoints, 10);
+	poly->initValues(spaceDisk, ctrPoints, 30);
 	poly->setRepeatAnimation(true);
 	poly->setResetSegment(2);
 	allPolyAnimations.push_back(poly);
 	
+	/*FOR CIRCULAR TRAJECTORIES
+	double inc = 0.05;
+	for(double i = 0; i <= 100; i++){
+
+		vector<double>* p1 = new vector<double>;
+			
+		x1 = 0 - 5* cosl(PI/2 - (2*PI) * (i/100));
+		if(i == 0){
+			y1 = 0;
+		}else{
+			y1 += inc;
+		}
+		z1 = 10 + 5* cosl(PI/2 - (PI*2) * (i/100));
+
+		cout << "x1 = " << x1 << endl;
+		cout << "z1 = " << z1 << endl;
+
+		p1->push_back(x1);
+		p1->push_back(y1);
+		p1->push_back(z1);
+		ctrPoints->push_back(p1);
+	}
+	cin.get();*/
 	glutTimerFunc(LineAnimation::getMiliSecs(), updateTransforms, 0);
     //materialAppearance = new CGFappearance();
     //textureAppearance = new CGFappearance("./textures/pyramid.jpg", GL_REPEAT, GL_REPEAT);
@@ -265,19 +266,19 @@ void LaigScene::display()
 
 
     glPushMatrix();
-    glTranslatef(3, 0, 3);
-    tent1->draw();
-    glPushMatrix();
-    glTranslatef(0, 6, 4);
-   // spaceDisk->draw();
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(9, 0, 6);
-    glScalef(10, 1, 10);
-    shader1->bind();
-    terrain1->draw();
-    shader1->unbind();
-    glPopMatrix();
+		//glTranslatef(3, 0, 3);
+		glPushMatrix();
+			glScalef(2,0.5,1);
+			glTranslatef(-5,0,20);
+			tent1->draw();
+		glPopMatrix();
+		glPushMatrix();
+			//glTranslatef(9, 0, 6);
+			glScalef(50, 2, 50);
+			shader1->bind();
+			terrain1->draw();
+			shader1->unbind();			
+		glPopMatrix();
     glPopMatrix();
 
     glutSwapBuffers();

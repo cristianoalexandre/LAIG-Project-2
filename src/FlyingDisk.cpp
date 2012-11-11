@@ -4,8 +4,8 @@ FlyingDisk::FlyingDisk()
 {
 
 	setPos_x(0.0);
-	setPos_y(0.0);
-	setPos_z(0.0);
+	setPos_y(4.0);
+	setPos_z(10.0);
 	setRotationAngleOnXXaxis(0.0);
 	setRotationAngleOnYYaxis(0.0);
 	setRotationAngleOnZZaxis(0.0);
