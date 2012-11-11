@@ -3,9 +3,9 @@
 Tent::Tent()
 {
     /** Defines the intermediate height for the tent */
-    height = 4.0;
-    z_bound = 3;
-    x_bound = 3;
+    height = 2.0;
+    z_bound = 2;
+    x_bound = 2;
     
     /** Definines control points */
     GLfloat control_points[][3] = {

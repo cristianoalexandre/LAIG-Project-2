@@ -13,9 +13,21 @@ void LaigScene::init()
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, CGFlight::background_ambient);
 
     /** Lights initialization */
-    float light0_pos[4] = {4.0, 6.0, 5.0, 1.0};
+    float light0_pos[4] = {-4.0, 20.0, 5.0, 1.0};
     light0 = new CGFlight(GL_LIGHT0, light0_pos);
     light0->enable();
+
+    float light1_pos[4] = {8.0, 20.0, 5.0, 1.0};
+    light1 = new CGFlight(GL_LIGHT1, light1_pos);
+    light1->enable();
+
+    float light2_pos[4] = {-4.0, 20.0, 10.0, 1.0};
+    light2 = new CGFlight(GL_LIGHT2, light2_pos);
+    light2->enable();
+
+    float light3_pos[4] = {8.0, 20.0, 10.0, 1.0};
+    light3 = new CGFlight(GL_LIGHT3, light3_pos);
+    light3->enable();
 
     /** Defines a default normal */
     glNormal3f(0, 0, 1);
@@ -26,6 +38,7 @@ void LaigScene::init()
     /** Materials initialization */
     materialAppearance = new CGFappearance();
     textureAppearance = new CGFappearance("./textures/pyramid.jpg", GL_REPEAT, GL_REPEAT);
+    tentAppearance = new CGFappearance("./textures/tent.jpg", GL_REPEAT, GL_REPEAT);
 
     /** Object initialization */
     plane1 = new Plane();
@@ -67,10 +80,11 @@ void LaigScene::init()
     setUpdatePeriod(30);
 
     tent1 = new Tent();
+    tent1->setTexture(tentAppearance);
+
     terrain1 = new Terrain();
 
     spaceDisk = new FlyingDisk();
-    spaceDisk->setTexture(textureAppearance);
 
     /** Shaders declaration*/
     shader1 = new DemoShader();
@@ -93,6 +107,9 @@ void LaigScene::display()
 
     /** Draw lights */
     light0->draw();
+    light1->draw();
+    light2->draw();
+    light3->draw();
 
     /** Setting the cullface and frontface */
     glEnable(GL_CULL_FACE);
@@ -105,8 +122,11 @@ void LaigScene::display()
 
     glPushMatrix();
     glTranslatef(3, 0, 3);
-    //tent1->draw();
+    tent1->draw();
+    glPushMatrix();
+    glTranslatef(0, 6, 4);
     spaceDisk->draw();
+    glPopMatrix();
     glPushMatrix();
     glTranslatef(9, 0, 6);
     glScalef(10, 1, 10);
@@ -130,6 +150,7 @@ LaigScene::~LaigScene()
     delete plane1;
     delete patch1;
     delete tent1;
+    delete spaceDisk;
 }
 
 void LaigScene::enableDisplayLists()

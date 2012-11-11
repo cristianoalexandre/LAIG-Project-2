@@ -22,6 +22,13 @@ Cylinder::Cylinder(float bRadius, float tRadius, float h, int slcs, int stcks)
     topTexture = NULL;
     bottomTexture = NULL;
     circularTexture = NULL;
+    quadricTop = gluNewQuadric();
+    quadricCircular = gluNewQuadric();
+    quadricBottom = gluNewQuadric();
+
+    gluQuadricTexture(quadricTop, true);
+    gluQuadricTexture(quadricBottom, true);
+    gluQuadricTexture(quadricCircular, true);
 }
 
 void Cylinder::setBaseRadius(float bRad)
@@ -51,21 +58,13 @@ void Cylinder::setStacks(int stcks)
 
 void Cylinder::draw()
 {
-    GLUquadric* quadricTop = gluNewQuadric();
-    GLUquadric* quadricCircular = gluNewQuadric();
-    GLUquadric* quadricBottom = gluNewQuadric();
-
-    gluQuadricTexture(quadricTop, true);
-    gluQuadricTexture(quadricBottom, true);
-    gluQuadricTexture(quadricCircular, true);
-
-    if(circularTexture != NULL)
+    if (circularTexture != NULL)
         circularTexture->apply();
     gluCylinder(quadricCircular, this->baseRadius, this->topRadius, this->height, this->slices, this->stacks);
 
     if (bottomTexture != NULL)
         bottomTexture->apply();
-    
+
     //Base circle
     glPushMatrix();
     glTranslatef(0.0, 0.0, 0.0);
@@ -73,9 +72,9 @@ void Cylinder::draw()
     gluDisk(quadricBottom, 0.0, this->baseRadius, this->slices, 1);
     glPopMatrix();
 
-    if(topTexture != NULL)
+    if (topTexture != NULL)
         topTexture->apply();
-    
+
     //Top Circle
     glPushMatrix();
     glTranslatef(0.0, 0.0, this->height);

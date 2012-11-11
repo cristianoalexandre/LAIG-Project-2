@@ -27,25 +27,32 @@ FlyingDisk::FlyingDisk()
 
     topPart = new Patch(3, 3, 20, 20, control_points, 16, 3);
     disk = new Cylinder(9, 9, 0.5, 255, 10);
+    
+    diskBottomAppearance = new CGFappearance("./textures/disk_down.png",GL_CLAMP,GL_CLAMP);
+    diskTopAppearance = new CGFappearance("./textures/disk_up.png", GL_CLAMP,GL_CLAMP);
+    topAppearance = new CGFappearance("./textures/top.png", GL_CLAMP,GL_CLAMP);
+    
+    topPart->setTexture(topAppearance);
+    disk->setBottomTexture(diskBottomAppearance);
+    disk->setTopTexture(diskTopAppearance);
 }
 
 FlyingDisk::~FlyingDisk()
 {
     delete topPart;
     delete disk;
+    delete diskBottomAppearance;
+    delete diskTopAppearance;
+    delete topAppearance;
 }
 
 void FlyingDisk::draw()
 {
     glPushMatrix();
     glScalef(0.2,0.2,0.2);
-    if (appearance != NULL)
-        topPart->setTexture(appearance);
     topPart->draw();
     glPushMatrix();
     glRotatef(90, 1, 0, 0);
-    if (appearance != NULL)
-        disk->setTexture(appearance);
     disk->draw();
     glPopMatrix();
     glPopMatrix();

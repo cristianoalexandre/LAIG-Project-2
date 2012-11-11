@@ -10,6 +10,10 @@ class FlyingDisk : public Object
 private:
     Patch * topPart;
     Cylinder * disk;
+    CGFappearance * topAppearance;
+    CGFappearance * diskTopAppearance;
+    CGFappearance * diskBottomAppearance;
+    
 public:
     FlyingDisk();
     ~FlyingDisk();

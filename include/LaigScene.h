@@ -23,10 +23,14 @@ private:
 
     /** Lights declaration */
     CGFlight * light0;
+    CGFlight * light1;
+    CGFlight * light2;
+    CGFlight * light3;
 
     /** Appearances declaration */
     CGFappearance* materialAppearance;
     CGFappearance* textureAppearance;
+    CGFappearance* tentAppearance;
 
     /** Primitives declaration */
     Plane * plane1;
