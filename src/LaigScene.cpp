@@ -47,6 +47,9 @@ void myGlutIdle( void )
 
 void LaigScene::init()
 {
+	/** Enables/Disables display lists */
+	use_display_lists = true;
+
     /** Enables lighting computations */
     glEnable(GL_LIGHTING);
 
@@ -273,7 +276,26 @@ void LaigScene::display()
 		allPolyAnimations[i]->animate();
 	}
 	
-	glCallList(cena);
+	if (use_display_lists)
+	{
+		glCallList(cena);
+	}
+	else
+	{
+		glPushMatrix();
+			glPushMatrix();
+				glScalef(2,0.5,1);
+				glTranslatef(-5,0,20);
+				tent1->draw();
+			glPopMatrix();
+			glPushMatrix();
+				glScalef(50, 2, 50);
+				shader1->bind();
+				terrain1->draw();
+				shader1->unbind();			
+			glPopMatrix();
+		glPopMatrix();
+	}
 
     glutSwapBuffers();
 }
