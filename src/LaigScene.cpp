@@ -38,7 +38,7 @@ void LaigScene::init()
         {0.5, 0, -0.5}
     };
     patch1 = new Patch(1, 1, 10, 10, patch1_control_points, 4, 3);
-    patch1->setAppearance(textureAppearance);
+    patch1->setTexture(textureAppearance);
 
     GLfloat patch2_control_points[][3] = {
         {0, 0, 0},
@@ -63,13 +63,17 @@ void LaigScene::init()
     };
 
     patch2 = new Patch(3, 3, 20, 20, patch2_control_points, 16, 3);
-    patch2->setAppearance(textureAppearance);
+    patch2->setTexture(textureAppearance);
     setUpdatePeriod(30);
 
     tent1 = new Tent();
     terrain1 = new Terrain();
+
+    spaceDisk = new FlyingDisk();
+    spaceDisk->setTexture(textureAppearance);
+
+    /** Shaders declaration*/
     shader1 = new DemoShader();
-    //shader1 = new CGFshader("/shaders/lightMapping.vert", "./shaders/lightMapping.frag");
 }
 
 void LaigScene::display()
@@ -95,14 +99,14 @@ void LaigScene::display()
     glCullFace(GL_BACK);
 
     /** Draw objects */
-    textureAppearance->apply();
     //plane1->draw();
     //patch1->draw();
     //patch2->draw();
 
     glPushMatrix();
     glTranslatef(3, 0, 3);
-    tent1->draw();
+    //tent1->draw();
+    spaceDisk->draw();
     glPushMatrix();
     glTranslatef(9, 0, 6);
     glScalef(10, 1, 10);

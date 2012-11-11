@@ -13,7 +13,7 @@ class Tent : Object
     public:
         Tent();
         ~Tent();
-        void setAppearance(CGFappearance * appearance);
+        void setTexture(CGFappearance * appearance);
         void draw();
 };
 

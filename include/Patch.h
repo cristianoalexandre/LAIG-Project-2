@@ -19,7 +19,6 @@ private:
     vec3 * control_points;
     vec2 * texture_points;
     int * divisions;
-    CGFappearance * appearance;
     int order_u;
     int order_v;
     int stride_u;
@@ -31,7 +30,6 @@ public:
     ~Patch();
 
     void draw();
-    void setAppearance(CGFappearance * appearance);
 };
 
 #endif	/* PATCH_H */

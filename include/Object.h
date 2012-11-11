@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include "CGFobject.h"
+#include "CGFappearance.h"
 
 #define NUM_COORD 3
 #define X 0
@@ -10,7 +11,7 @@
 
 class Object: public CGFobject{
 
-private:
+protected:
 	double pos_x;
 	double pos_y;
 	double pos_z;
@@ -22,6 +23,7 @@ private:
 	double up_vector[NUM_COORD];
 
 	bool animate;
+        CGFappearance * appearance;
 
 public:
 	Object();
@@ -50,8 +52,8 @@ public:
 	void updatePosition(double delta_x, double delta_y, double delta_z);
 
 	void applyTransforms();
-	void draw(){} //virtual trouble
-
+	virtual void draw();
+        virtual void setTexture(CGFappearance * appearance);
 };
 
 

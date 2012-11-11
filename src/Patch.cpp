@@ -131,11 +131,6 @@ void Patch::draw()
         glCullFace(cull_face_mode);
 }
 
-void Patch::setAppearance(CGFappearance* appearance)
-{
-    this->appearance = appearance;
-}
-
 Patch::~Patch()
 {
     delete control_points;

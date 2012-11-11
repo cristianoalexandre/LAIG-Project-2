@@ -38,9 +38,9 @@ Tent::~Tent()
     delete patch;
 }
 
-void Tent::setAppearance(CGFappearance * appearance)
+void Tent::setTexture(CGFappearance * appearance)
 {
-    patch->setAppearance(appearance);
+    patch->setTexture(appearance);
 }
 
 void Tent::draw()

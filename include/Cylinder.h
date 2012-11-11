@@ -2,6 +2,7 @@
 #define CYLINDER_H
 
 #include "Primitive.h"
+#include "CGFappearance.h"
 
 class Cylinder: public Primitive
 {
@@ -11,6 +12,9 @@ private:
 	float height;
 	int slices;
 	int stacks;
+        CGFappearance * topTexture;
+        CGFappearance * bottomTexture;
+        CGFappearance * circularTexture;
 public:
 	Cylinder();
 	Cylinder(float bRadius, float tRadius, float h, int slcs, int stcks);
@@ -22,6 +26,11 @@ public:
 	void setSlices(int slcs);
 	void setStacks(int stcks);
 
+        void setTexture(CGFappearance * appearance);
+        void setTopTexture(CGFappearance * appearance);
+        void setBottomTexture(CGFappearance * appearance);
+        void setCircularTexture(CGFappearance * appearance);
+        
 	void draw();
 
 	virtual int addValues(string attr, string val);

@@ -13,6 +13,7 @@
 #include "CGFobject.h"
 #include "CGFshader.h"
 #include "DemoShader.h"
+#include "FlyingDisk.h"
 
 class LaigScene : public CGFscene
 {
@@ -33,6 +34,7 @@ private:
     Patch * patch2;
     Tent * tent1;
     Terrain * terrain1;
+    FlyingDisk * spaceDisk;
     
     /** Shaders declaration */
     DemoShader * shader1;
